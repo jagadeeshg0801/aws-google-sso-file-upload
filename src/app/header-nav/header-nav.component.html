@@ -1,0 +1,22 @@
+<div class="alert alert-info">
+    <div class="row">
+        <div class="col-8 title">
+            <i class="fa fa-bitbucket" aria-hidden="true"></i>   Data Storage Bucket
+        </div>
+        <div class="col-3 user-info" *ngIf="user">
+           <div class="name">
+            <i class="fa fa-user-circle"></i> <label>{{user?.name}}</label>
+           </div>
+           <div class="email">
+            <i class="fa fa-envelope-o"></i> <label>{{user?.email}}</label>
+           </div>
+            
+        </div>
+        <div class="col-1 power-off" *ngIf="user">
+            <i class="fa fa-power-off" aria-hidden="true" (click)="logoff()"></i>
+        </div>
+        <div class="col-4 power-in" *ngIf="!user">
+            <a [routerLink]="['/']" routerLinkActive="router-link-active" ><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
+        </div>
+    </div>
+  </div>

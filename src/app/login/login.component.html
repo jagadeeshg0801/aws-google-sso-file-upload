@@ -1,0 +1,48 @@
+<!-- <div class="card col-12 login-box" *ngIf="!user">
+    <h5>Welcome !!</h5>
+    <asl-google-signin-button class="mx-5"></asl-google-signin-button>
+   <div id="g_id_onload" data-client_id="462697480755-edkjrgta8h6j7vol06dglm8j71m73i5j.apps.googleusercontent.com"
+        data-context="signin" data-ux_mode="popup" data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with"
+        data-size="large" data-logo_alignment="left">
+    </div> 
+    
+
+<div class="g_id_signin"
+    data-type="standard"
+    data-shape="rectangular"
+    data-theme="outline"
+    data-text="signin_with"
+    data-size="large"
+    data-logo_alignment="left">
+</div>
+    
+</div>
+-->
+<div class="jumbotron bg-transparent text-center">
+    
+    <div *ngIf="!user" class="card text-center">
+
+        <h6 class="card-header"><i class="fa fa-bitbucket" aria-hidden="true"></i> Storage Bucket</h6>
+        <div class="card-block">
+            <h4 class="card-title">Welcome</h4>
+            <p class="card-text">Not Logged In</p>
+        </div>
+        <div class="card-block d-flex justify-content-center btn-box">
+
+            <asl-google-signin-button [text]="'signin_with'" [type]="'standard'" [width]="'200px'" [shape]="'rectangular'" class="mx-5"></asl-google-signin-button>
+            </div>
+    </div>
+</div>
+<div class="col-12 card" *ngIf="loggedIn">
+    <img src="{{ user?.photoUrl }}" referrerpolicy="no-referrer">
+    <div>
+        <h4><b> Hello </b>{{ user?.name }}</h4>
+        <p>{{ user?.email }}</p>
+    </div>
+    <div>
+        <a [routerLink]="['/file-upload']" routerLinkActive="router-link-active">View your Files</a>
+    </div>
+</div>

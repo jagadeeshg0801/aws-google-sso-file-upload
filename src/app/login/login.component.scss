@@ -1,0 +1,55 @@
+.bg-transparent {
+    background-color: transparent;
+  }
+  
+  :host {
+    height: 100%;
+  }
+  
+  .photo {
+    object-fit: contain;
+  }
+  
+  .card {
+    width: 20rem;
+    margin: 0 auto;
+    height: 12rem;
+    margin-top: 10%;
+  }
+
+  .btn-box{
+    margin: 16px;
+  }
+
+  .col-12.card {
+    text-align: center;
+}
+h4 {
+  color: orange;
+  margin: 15px;
+}
+.card {
+  width: 26rem;
+  margin: 0 auto;
+  height: 15rem;
+  border: 1px solid inherit;
+  margin-top: 10%;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px 3px #c4c4c4;
+}
+.card-header{
+    padding: 13px;
+    text-align: left;
+    font-variant: all-petite-caps;
+    font-size: 18px;
+}
+.login-box{
+  width: 375px;
+    height: 400px;
+    align-items: center;
+    margin-top: 7%;
+}
+
+.col-12.card{
+  width: 19rem;
+}
