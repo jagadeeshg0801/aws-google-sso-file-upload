@@ -1,3 +1,6 @@
+
+#For View
+click here https://jagadeeshg0801.github.io/aws-google-sso-file-upload/login
 # AwsGoogleSsoFileUpload
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.1.
