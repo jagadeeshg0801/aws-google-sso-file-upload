@@ -13,9 +13,11 @@ export class FileService {
   FOLDER: any = 'JG_1/';
   bucketName = 'jaga-bucket';
   private filesList$: any = new BehaviorSubject(null);
-  public loggedIn$ =  new BehaviorSubject(false);
+  public loggedIn$ = new BehaviorSubject(true);
   userInfo: any = null;
   that = this;
+
+  public _isShowSpinner = new BehaviorSubject<boolean>(false);
   constructor(private authService: SocialAuthService, private toast: MessageService) {
     this.authService.authState.subscribe((res: any) => {
       this.userInfo = res;
@@ -34,8 +36,8 @@ export class FileService {
   }
 
   isUserLoggedIn() {
-   const loggedIn= this.userInfo ? true : false;
-   this.loggedIn$.next(loggedIn); 
+    const loggedIn = this.userInfo ? true : false;
+    this.loggedIn$.next(loggedIn);
     return loggedIn;
   }
   uploadFile(file: File) {
@@ -55,7 +57,7 @@ export class FileService {
       ACL: 'public-read',
       ContentType: contentType
     };
-    const x: any = this.bucket.upload(params, function (err: any, data: any) {
+    const x: any = this.bucket.upload(params, { partSize: 10 * 1024 * 1024, queueSize: 1, }, function (err: any, data: any) {
       if (err) {
         //console.log('There was an error uploading your file: ', err);
         // return false;
@@ -63,12 +65,14 @@ export class FileService {
 
       // return true;
     });
-
-    if (x && x['failed']== false) {
+    console.log('x..', x)
+    if (x && x['failed'] == false) {
       this.toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded Successfully' });
-      this.getFiles();
+      this.hideLoader();
+
       return true;
     } else {
+      this.hideLoader();
       this.toast.add({ severity: 'error', summary: 'Failed', detail: 'File Upload Failed' });
       return false;
     }
@@ -100,6 +104,8 @@ export class FileService {
         });
       }
     });
+
+    this.hideLoader();
     return of(fileUploads)
   }
 
@@ -113,40 +119,60 @@ export class FileService {
 
     this.bucket.getObject(params, function (err, data: any) {
       if (data) {
-        const blob = new Blob([data.Body], { type: data.contentType });
+        const blob = new Blob([data.Body], { type: data.ContentType });
         let currentDate = new Date();
         const timeStamp = currentDate.getMonth() + '/' + currentDate.getDate() + '/'
           + currentDate.getFullYear();
         const url = window.URL.createObjectURL(blob);
-        saveAs(blob,  fileName+ '_' +timeStamp )
+        saveAs(blob, timeStamp + fileName);
       }
     })
+    this.hideLoader();
   }
 
 
   deleteFile(fileName: string) {
+    this.showLoader();
     let params = {
       Bucket: this.bucketName,
       Key: fileName
     };
     //console.log('fielname', fileName)
-    const y: any = this.bucket.deleteObject(params, function(err, data: any) {
+    const y: any = this.bucket.deleteObject(params, function (err, data: any) {
       if (err) {
       } else {
 
       }
     });
-    //console.log('y', y)
+    console.log('y', y)
     if (y && y['response']['error'] == null) {
       this.toast.add({ severity: 'success', summary: 'Success', detail: 'File Deleted Successfully' });
       this.getFiles();
+      this.hideLoader();
       return true;
     } else {
       this.toast.add({ severity: 'error', summary: 'Failed', detail: 'File Deletion Failed' });
-      
+      this.hideLoader();
       return false;
     }
 
-    
+
+
   }
+
+
+  showLoader() {
+    if (this.isUserLoggedIn()) {
+      this._isShowSpinner.next(true)
+    }
+  }
+
+  hideLoader() {
+    this._isShowSpinner.next(false);
+  }
+
+  getSpinnerStatus(): Observable<boolean> {
+    return this._isShowSpinner;
+  }
+
 }

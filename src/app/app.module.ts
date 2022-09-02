@@ -16,13 +16,15 @@ import { MessageService } from 'primeng/api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GoogleSigninButtonDirective } from './google-signin-button.directive';
 import {DialogModule} from 'primeng/dialog';
+import { SpinnerComponent } from './spinner/spinner.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     FileUploadComponent,
     HeaderNavComponent,
-    GoogleSigninButtonDirective, 
+    GoogleSigninButtonDirective,
+    SpinnerComponent, 
     
 
   ],
