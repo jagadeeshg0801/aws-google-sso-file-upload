@@ -11,12 +11,17 @@ export class AppComponent implements OnInit {
   title = 'aws-google-sso-file-upload';
   
   display: boolean = true;
+  isShow: boolean;
   constructor(private fileService:FileService, private router: Router){}
 
   ngOnInit(): void {
     this.fileService.loggedIn$.subscribe((res:boolean)=>{
       this.display = res;
       //console.log('dis', this.display)
+    })
+    this.fileService.getSpinnerStatus().subscribe((status:boolean)=>{
+      console.log('sho', status)
+      this.isShow = status;
     })
   }
 

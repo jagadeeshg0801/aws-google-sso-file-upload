@@ -27,11 +27,13 @@ export class FileUploadComponent implements OnInit {
     this.getFiles();
   }
 
-  getFiles(){
-    this.filesList = this.fileService.getFiles()
+  getFiles(){    
+    // this.fileService.showLoader();
+    this.filesList = this.fileService.getFiles(); 
   }
 
-  downloadFile(file:any){
+  downloadFile(file:any){    
+    this.fileService.showLoader();
     this.fileService.downLoadFile(file['Key']);
   }
 
@@ -55,8 +57,10 @@ export class FileUploadComponent implements OnInit {
 
 
   upload() {
+    this.fileService.showLoader();
     const file = this.selectedFiles.item(0);
    const x= this.fileService.uploadFile(file);
+   console.log('x',x)
    if(x){
     this.getFiles();
     this.fileData = null;
