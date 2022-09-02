@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate {
       this.fileService.loggedIn$.subscribe(res =>{
           this.isLoggedIn = res;
       })
+      return true;
       if(this.isLoggedIn){
         return this.isLoggedIn;
       }
