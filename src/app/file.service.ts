@@ -41,7 +41,7 @@ export class FileService {
   uploadFile(file: File) {
     let folderName: any = '';
     if (!this.isUserLoggedIn()) {
-      // alert('Please Login!')
+      alert('Please Login!')
       return;
     } else {
       folderName = this.userInfo.email.split('@')[0]
