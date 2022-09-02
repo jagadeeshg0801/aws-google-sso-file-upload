@@ -18,8 +18,7 @@
      </ng-template>
   </p-dialog> -->
 </div>
-{{isShow |json}}
-<div class="" *ngIf="isShow">
+<div class="" [hidden]="!isShow">
   <app-spinner></app-spinner>
 </div>
 <p-toast></p-toast>

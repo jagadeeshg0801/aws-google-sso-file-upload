@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
       this.display = res;
       //console.log('dis', this.display)
     })
-    this.fileService.getSpinnerStatus().subscribe((status:boolean)=>{
+    this.fileService._isShowSpinner.subscribe((status:boolean)=>{
       console.log('sho', status)
       this.isShow = status;
     })
