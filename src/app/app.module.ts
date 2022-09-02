@@ -44,7 +44,7 @@ import {DialogModule} from 'primeng/dialog';
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('462697480755-edkjrgta8h6j7vol06dglm8j71m73i5j.apps.googleusercontent.com')
+            provider: new GoogleLoginProvider('462697480755-2g41h18evcqmc6mouabk6caqg9tqdrvj.apps.googleusercontent.com')
           }
         ],
         onError: (err) => {
