@@ -41,6 +41,8 @@ export class FileService {
     return loggedIn;
   }
   uploadFile(file: File) {
+    
+    let that = this;
     let folderName: any = '';
     if (!this.isUserLoggedIn()) {
       alert('Please Login!')
@@ -57,25 +59,22 @@ export class FileService {
       ACL: 'public-read',
       ContentType: contentType
     };
-    const x: any = this.bucket.upload(params, { partSize: 10 * 1024 * 1024, queueSize: 1, }, function (err: any, data: any) {
+    const x: any = this.bucket.upload(params, { partSize: 100 * 1024 * 1024, queueSize: 1, }, function (err: any, data: any) {
       if (err) {
         //console.log('There was an error uploading your file: ', err);
         // return false;
+            
+        that.toast.add({ severity: 'error', summary: 'Failed', detail: 'File Upload Failed' });   
+        that.hideLoader();
       }
-
+      if(data){
+        that.toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded Successfully' }); 
+        that.hideLoader();
+        that.getFiles();
+      }
+      
       // return true;
     });
-    console.log('x..', x)
-    if (x && x['failed'] == false) {
-      this.toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded Successfully' });
-      this.hideLoader();
-
-      return true;
-    } else {
-      this.hideLoader();
-      this.toast.add({ severity: 'error', summary: 'Failed', detail: 'File Upload Failed' });
-      return false;
-    }
   }
 
 
@@ -94,6 +93,7 @@ export class FileService {
       Prefix: folderName
     }
     const fileUploads = new Array();
+    let that = this;
     this.bucket.listObjects(params, function (err, data: any) {
       if (err) {
         //console.log('err', err)
@@ -102,21 +102,32 @@ export class FileService {
         fileData.forEach((element: any) => {
           fileUploads.push(element)
         });
+        that.setFilesList(fileUploads);
       }
+      
+      that.hideLoader();
     });
 
-    this.hideLoader();
+   
     return of(fileUploads)
   }
 
 
+  //get Files data 
+  setFilesList(list:any){
+    this.filesList$.next(list)
+  }
+
+  getFilesList():Observable<any>{
+    return this.filesList$;
+  }
   //Download File
   downLoadFile(fileName: string) {
     let params = {
       Bucket: this.bucketName,
       Key: fileName
     }
-
+    let that = this;
     this.bucket.getObject(params, function (err, data: any) {
       if (data) {
         const blob = new Blob([data.Body], { type: data.ContentType });
@@ -125,14 +136,20 @@ export class FileService {
           + currentDate.getFullYear();
         const url = window.URL.createObjectURL(blob);
         saveAs(blob, timeStamp + fileName);
+       that.hideLoader();
+       that.toast.add({ severity: 'success', summary: 'Success', detail: 'File Downloaded Successfully' });
+      }else{
+        that.toast.add({ severity: 'error', summary: 'Failed', detail: 'Something went wrong!' });   
+        that.hideLoader();
       }
     })
-    this.hideLoader();
+   
   }
 
 
   deleteFile(fileName: string) {
     this.showLoader();
+    let that = this;
     let params = {
       Bucket: this.bucketName,
       Key: fileName
@@ -140,24 +157,14 @@ export class FileService {
     //console.log('fielname', fileName)
     const y: any = this.bucket.deleteObject(params, function (err, data: any) {
       if (err) {
+        that.toast.add({ severity: 'error', summary: 'Failed', detail: 'File Deletion Failed' });   
+        that.hideLoader();
       } else {
-
+        that.toast.add({ severity: 'success', summary: 'Success', detail: 'File Deleted Successfully' }); 
+        that.hideLoader();        
+        that.getFiles();
       }
     });
-    console.log('y', y)
-    if (y && y['response']['error'] == null) {
-      this.toast.add({ severity: 'success', summary: 'Success', detail: 'File Deleted Successfully' });
-      this.getFiles();
-      this.hideLoader();
-      return true;
-    } else {
-      this.toast.add({ severity: 'error', summary: 'Failed', detail: 'File Deletion Failed' });
-      this.hideLoader();
-      return false;
-    }
-
-
-
   }
 
 

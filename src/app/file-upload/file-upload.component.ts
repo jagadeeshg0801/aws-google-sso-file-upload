@@ -24,12 +24,13 @@ export class FileUploadComponent implements OnInit {
   constructor(private fileService: FileService) { }
 
   ngOnInit(): void {
+    this.getFilesList();
     this.getFiles();
   }
 
   getFiles(){    
-    // this.fileService.showLoader();
-    this.filesList = this.fileService.getFiles(); 
+    this.fileService.showLoader();
+    this.filesList = this.fileService.getFilesList(); 
   }
 
   downloadFile(file:any){    
@@ -39,9 +40,6 @@ export class FileUploadComponent implements OnInit {
 
   deleteFile(fileName:any){
    const x= this.fileService.deleteFile(fileName);
-    if(x){
-      this.getFiles();
-     }
   }
 
   getFileSizeInMb(fileSize:number){
@@ -61,10 +59,9 @@ export class FileUploadComponent implements OnInit {
     const file = this.selectedFiles.item(0);
    const x= this.fileService.uploadFile(file);
    console.log('x',x)
-   if(x){
-    this.getFiles();
+
     this.fileData = null;
-   }
+
    //console.log("com x", x);
   }
 
@@ -73,6 +70,6 @@ export class FileUploadComponent implements OnInit {
   }
 
   getFilesList(){
-    this.getFiles();
+    this.fileService.getFiles();
   }
 }
