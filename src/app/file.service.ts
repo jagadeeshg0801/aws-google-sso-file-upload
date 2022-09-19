@@ -14,10 +14,13 @@ export class FileService {
   bucketName = 'jaga-bucket';
   private filesList$: any = new BehaviorSubject(null);
   public loggedIn$ = new BehaviorSubject(true);
+  public userInfo$ = new BehaviorSubject(null);
+
   userInfo: any = null;
   that = this;
 
   public _isShowSpinner = new BehaviorSubject<boolean>(false);
+  public adminList = ["thapliyal7662", "ameyagthakur" ];
   constructor(private authService: SocialAuthService, private toast: MessageService) {
     this.authService.authState.subscribe((res: any) => {
       this.userInfo = res;
@@ -36,6 +39,7 @@ export class FileService {
   }
 
   isUserLoggedIn() {
+    console.log('userINfo', this.userInfo)
     const loggedIn = this.userInfo ? true : false;
     this.loggedIn$.next(loggedIn);
     return loggedIn;
@@ -50,11 +54,12 @@ export class FileService {
     } else {
       folderName = this.userInfo.email.split('@')[0]
     }
+    let folder_path = this.adminList.includes(folderName) ? 'admin': 'admin/'+folderName;
     //console.log(',...', this.userInfo.email.split('@'))
     const contentType = file.type;
     const params = {
       Bucket: this.bucketName,
-      Key: folderName + '/' + file.name,
+      Key: folder_path + '/' + file.name,
       Body: file,
       ACL: 'public-read',
       ContentType: contentType
@@ -88,9 +93,11 @@ export class FileService {
     } else {
       folderName = this.userInfo.email.split('@')[0]
     }
+   
+    let folder_path = this.adminList.includes(folderName) ? 'admin': 'admin/'+folderName;
     const params = {
       Bucket: 'jaga-bucket',
-      Prefix: folderName
+      Prefix: folder_path
     }
     const fileUploads = new Array();
     let that = this;
@@ -100,6 +107,7 @@ export class FileService {
       } else {
         const fileData = data.Contents;
         fileData.forEach((element: any) => {
+          element['Key'] = element['Key'].split(folder_path+'/')[1]
           fileUploads.push(element)
         });
         that.setFilesList(fileUploads);
