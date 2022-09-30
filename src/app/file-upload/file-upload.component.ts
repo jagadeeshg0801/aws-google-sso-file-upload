@@ -35,7 +35,7 @@ export class FileUploadComponent implements OnInit {
 
   downloadFile(file:any){    
     this.fileService.showLoader();
-    this.fileService.downLoadFile(file['Key']);
+    this.fileService.downLoadFile(file['Path']);
   }
 
   deleteFile(fileName:any){
@@ -50,7 +50,7 @@ export class FileUploadComponent implements OnInit {
 
 
   viewFile(file:any){
-    window.open(this.awsURL + file['Key'], "Video Window", 'width=640, height=480')
+    window.open(this.awsURL + file['Path'], "Video Window", 'width=640, height=480')
   }
 
 

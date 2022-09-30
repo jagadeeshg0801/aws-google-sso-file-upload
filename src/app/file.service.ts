@@ -20,6 +20,8 @@ export class FileService {
   that = this;
 
   public _isShowSpinner = new BehaviorSubject<boolean>(false);
+  //deployement  command
+  // ng deploy --base-href=/aws-google-sso-file-upload/
   public adminList = ["thapliyal7662", "ameyagthakur" ];
   constructor(private authService: SocialAuthService, private toast: MessageService) {
     this.authService.authState.subscribe((res: any) => {
@@ -106,8 +108,9 @@ export class FileService {
         //console.log('err', err)
       } else {
         const fileData = data.Contents;
-        fileData.forEach((element: any) => {
-          element['Key'] = element['Key'].split(folder_path+'/')[1]
+        fileData.forEach((element: any) => {          
+          element['Path'] = element['Key']
+          element['Key'] = element['Key'].split(folder_path+'/')[1],
           fileUploads.push(element)
         });
         that.setFilesList(fileUploads);
